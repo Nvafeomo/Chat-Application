@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkWindow" id="window">
+    <property name="default-height">700</property>
+    <property name="default-width">700</property>
+    <property name="title" translatable="yes">Chat Room</property>
+    <child>
+      <object class="GtkBox" id="Main">
+        <property name="spacing">5</property>
+        <property name="orientation">1</property>
+        <property name="valign">3</property>
+        <property name="halign">3</property>
+        <property name="width-request">700</property>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="height-request">600</property>
+            <property name="vexpand-set">true</property>
+            <property name="hexpand-set">true</property>
+            <child>
+              <object class="GtkTextView" id="chat_display">
+                <property name="editable">false</property>
+								<property name="wrap-mode">3</property>
+								<property name="margin-start">10</property>
+                <property name="margin-end">20</property>
+                <property name="margin-top">20</property>
+                <property name="margin-bottom">20</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkEntry" id="message_entry">
+						<property name="placeholder-text" translatable="yes">Type your message here...</property>
+						<property name="margin-start">20</property>
+						<property name="margin-end">20</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">0</property>
+						<property name="spacing">5</property>
+						<property name="margin-start">20</property>
+						<property name="margin-end">20</property>
+            <child>
+              <object class="GtkButton" id="send_button">
+                <property name="label" translatable="yes">Send</property>
+                <property name="sensitive">false</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="exit_button">
+                <property name="label" translatable="yes">Exit</property>
+              </object>
+						</child>
+						<child>
+							<object class ="GtkSwitch" id="theme_switch">
+								<property name="active">false</property> 
+							</object>
+						</child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

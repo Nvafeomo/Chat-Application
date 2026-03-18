@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkWindow" id="window">
+    <property name="default-height">400</property>
+    <property name="default-width">350</property>
+    <property name="title" translatable="yes">Join Chat Room</property>
+    <child>
+      <object class="GtkBox" id="Main">
+        <property name="orientation">1</property>
+        <property name="valign">3</property>
+        <property name="halign">3</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">Group 4 Chat Application</property>
+            <property name="margin-bottom">30</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkEntry" id="Port">
+            <property name="placeholder-text" translatable="yes">Enter Port Number</property>
+            <property name="halign">3</property>
+            <property name="margin-bottom">10</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkEntry" id="Host">
+            <property name="placeholder-text" translatable="yes">Enter Hostname</property>
+            <property name="halign">3</property>
+            <property name="margin-bottom">10</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkEntry" id="Username">
+            <property name="placeholder-text" translatable="yes">Enter Username</property>
+            <property name="halign">3</property>
+            <property name="margin-bottom">30</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="Connect">
+            <property name="label" translatable="yes">Connect to Chat Room</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
