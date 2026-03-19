@@ -2,6 +2,8 @@
 
 A production-grade real-time chat application demonstrating **distributed systems**, **concurrent programming**, and **full-stack development**. Built for systems engineering and software engineering roles.
 
+This project originated from a **group assignment** implementing a multi-client TCP chat server in C using POSIX sockets and pthreads. The C server was written and tested in a Linux virtual machine (Ubuntu). The project has since been expanded with a Go WebSocket backend, React frontend, and Docker deployment, while preserving the C implementation as a systems showcase.
+
 ![Architecture](https://img.shields.io/badge/Go-WebSocket%20Server-00ADD8?style=flat&logo=go)
 ![React](https://img.shields.io/badge/React-TypeScript-61DAFB?style=flat&logo=react)
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat&logo=docker)
@@ -132,6 +134,14 @@ The `c-server/` directory contains a **POSIX C** implementation for systems-leve
 - **pthreads** for concurrent client handling
 - **Mutex** synchronization for shared `client_sockets` array
 - **Memory safety** (heap-allocated per-client args to avoid race)
+- Broadcasts messages from one client to all others
+- Gracefully handles client disconnects and server capacity limits (sends `-1` when full)
+
+**Prerequisites (Linux):**
+```bash
+sudo apt update
+sudo apt install build-essential
+```
 
 **Build & Run (Linux/WSL):**
 ```bash
@@ -140,6 +150,8 @@ make
 ./server 8080          # Terminal 1
 ./client localhost 8080   # Terminal 2+
 ```
+
+Press **Ctrl+C** in the server terminal to shut down. The C server remains compatible with any standard TCP client.
 
 ---
 
