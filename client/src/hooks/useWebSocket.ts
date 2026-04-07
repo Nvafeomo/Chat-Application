@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import type { ConnectionConfig } from '../App'
+import { isPublicFlag } from '../roomStorage'
 
 export interface WSMessage {
   type: string
@@ -8,45 +9,72 @@ export interface WSMessage {
   timestamp?: string
 }
 
+export type ConnectionStatus = 'connecting' | 'open' | 'closed'
+
 export function useWebSocket(config: ConnectionConfig) {
   const [messages, setMessages] = useState<WSMessage[]>([])
   const [members, setMembers] = useState<string>('')
-  const [connected, setConnected] = useState(false)
+  const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>('connecting')
+  const [roomMeta, setRoomMeta] = useState<{ public: boolean } | null>(null)
+  const [closeHint, setCloseHint] = useState<string | null>(null)
   const wsRef = useRef<WebSocket | null>(null)
   const reconnectTimeoutRef = useRef<number>()
+  /** Increments each new connection attempt; handlers compare to their captured id (not wsRef — ref is overwritten before old onopen can run). */
+  const generationRef = useRef(0)
 
   const connect = useCallback((): WebSocket => {
+    setRoomMeta(null)
+    setCloseHint(null)
+    setConnectionStatus('connecting')
+    generationRef.current += 1
+    const myId = generationRef.current
+
     const protocol = config.serverUrl.startsWith('https') ? 'wss' : 'ws'
     const host = config.serverUrl.replace(/^https?:\/\//, '').replace(/\/$/, '')
-    const wsUrl = `${protocol}://${host}/ws?username=${encodeURIComponent(config.username)}&room=${encodeURIComponent(config.room)}`
+    const wsUrl = `${protocol}://${host}/ws?username=${encodeURIComponent(config.username)}&room=${encodeURIComponent(config.room)}&password=${encodeURIComponent(config.password)}`
 
     const ws = new WebSocket(wsUrl)
     wsRef.current = ws
 
-    ws.onopen = () => setConnected(true)
+    const isStale = () => generationRef.current !== myId
+
+    ws.onopen = () => {
+      if (isStale()) return
+      setConnectionStatus('open')
+    }
 
     ws.onmessage = (event) => {
+      if (isStale()) return
       try {
         const msg = JSON.parse(event.data) as Record<string, unknown>
         const msgType = String(msg?.type ?? '')
         if (msgType === 'members') {
           setMembers(String(msg?.content ?? ''))
+        } else if (msgType === 'room_meta') {
+          setRoomMeta({ public: isPublicFlag(msg?.room_public) })
         } else {
-          // Add chat, system, or any other message to the list
-          setMessages((prev) => [...prev, {
-            type: msgType || 'chat',
-            username: msg?.username as string | undefined,
-            content: String(msg?.content ?? ''),
-          }])
+          setMessages((prev) => [
+            ...prev,
+            {
+              type: msgType || 'chat',
+              username: msg?.username as string | undefined,
+              content: String(msg?.content ?? ''),
+            },
+          ])
         }
       } catch {
         // ignore parse errors
       }
     }
 
-    ws.onclose = () => {
-      setConnected(false)
+    ws.onclose = (ev) => {
+      if (isStale()) return
       wsRef.current = null
+      setConnectionStatus('closed')
+      if (ev.code !== 1000) {
+        const r = ev.reason?.trim()
+        setCloseHint(r ? `${ev.code}: ${r}` : `Closed (${ev.code})`)
+      }
     }
 
     ws.onerror = () => {
@@ -54,7 +82,7 @@ export function useWebSocket(config: ConnectionConfig) {
     }
 
     return ws
-  }, [config.username, config.room, config.serverUrl])
+  }, [config.username, config.room, config.password, config.serverUrl])
 
   useEffect(() => {
     const ws = connect()
@@ -75,5 +103,7 @@ export function useWebSocket(config: ConnectionConfig) {
     reconnectTimeoutRef.current = window.setTimeout(connect, 500)
   }, [connect])
 
-  return { messages, members, connected, send, reconnect }
+  const connected = connectionStatus === 'open'
+
+  return { messages, members, connected, connectionStatus, roomMeta, closeHint, send, reconnect }
 }

@@ -19,9 +19,10 @@ var upgrader = websocket.Upgrader{
 }
 
 // HandleConnection upgrades HTTP to WebSocket and handles client lifecycle
-func HandleConnection(h *hub.Hub, w http.ResponseWriter, r *http.Request) {
+func HandleConnection(h *hub.Hub, rooms *hub.RoomRegistry, w http.ResponseWriter, r *http.Request) {
 	username := r.URL.Query().Get("username")
 	room := r.URL.Query().Get("room")
+	password := r.URL.Query().Get("password")
 
 	if username == "" || room == "" {
 		http.Error(w, "username and room required", http.StatusBadRequest)
@@ -29,10 +30,19 @@ func HandleConnection(h *hub.Hub, w http.ResponseWriter, r *http.Request) {
 	}
 
 	username = strings.TrimSpace(username)
-	room = strings.TrimSpace(room)
+	room = hub.NormalizeRoomName(room)
 
-	if len(username) > 32 || len(room) > 64 {
-		http.Error(w, "username/room too long", http.StatusBadRequest)
+	if len(username) > 32 || len(room) > 64 || room == "" {
+		http.Error(w, "username/room invalid", http.StatusBadRequest)
+		return
+	}
+
+	if !rooms.RoomExists(room) {
+		http.Error(w, "room not found — create it first", http.StatusNotFound)
+		return
+	}
+	if !rooms.VerifyPassword(room, password) {
+		http.Error(w, "wrong password", http.StatusUnauthorized)
 		return
 	}
 
@@ -43,7 +53,7 @@ func HandleConnection(h *hub.Hub, w http.ResponseWriter, r *http.Request) {
 	}
 
 	send := make(chan []byte, 256)
-	client := hub.CreateClient(username, room, h, send)
+	client := hub.CreateClient(username, room, rooms.IsPublic(room), h, send)
 
 	h.Register(client)
 	defer h.Unregister(client)

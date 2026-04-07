@@ -16,25 +16,28 @@ const (
 	MsgSystem  = "system"
 	MsgRooms   = "rooms"
 	MsgMembers = "members"
+	MsgRoomMeta = "room_meta"
 )
 
 // Message represents a chat protocol message
 type Message struct {
-	Type      string    `json:"type"`
-	Room      string    `json:"room,omitempty"`
-	Username  string    `json:"username,omitempty"`
-	Content   string    `json:"content,omitempty"`
-	Timestamp time.Time `json:"timestamp,omitempty"`
-	ClientID  string    `json:"client_id,omitempty"`
+	Type       string    `json:"type"`
+	Room       string    `json:"room,omitempty"`
+	Username   string    `json:"username,omitempty"`
+	Content    string    `json:"content,omitempty"`
+	Timestamp  time.Time `json:"timestamp,omitempty"`
+	ClientID   string    `json:"client_id,omitempty"`
+	RoomPublic *bool     `json:"room_public,omitempty"`
 }
 
 // Client represents a connected WebSocket client
 type Client struct {
-	ID       string
-	Username string
-	Room     string
-	Send     chan []byte
-	Hub      *Hub
+	ID         string
+	Username   string
+	Room       string
+	RoomPublic bool
+	Send       chan []byte
+	Hub        *Hub
 }
 
 // Hub maintains the set of active clients and broadcasts messages
@@ -90,6 +93,18 @@ func (h *Hub) registerClient(client *Client) {
 		h.rooms[client.Room] = make(map[string]*Client)
 	}
 	h.rooms[client.Room][client.ID] = client
+
+	// Tell this client only whether the room is public (for UI); not broadcast to others
+	rp := client.RoomPublic
+	metaMsg := Message{Type: MsgRoomMeta, RoomPublic: &rp}
+	metaData, _ := json.Marshal(metaMsg)
+	select {
+	case client.Send <- metaData:
+	default:
+		close(client.Send)
+		delete(h.rooms[client.Room], client.ID)
+		return
+	}
 
 	// Notify room of new member
 	joinMsg := Message{
@@ -180,13 +195,14 @@ func (h *Hub) GetRoomList() []string {
 }
 
 // CreateClient creates a new client with unique ID
-func CreateClient(username, room string, h *Hub, send chan []byte) *Client {
+func CreateClient(username, room string, roomPublic bool, h *Hub, send chan []byte) *Client {
 	return &Client{
-		ID:       uuid.New().String(),
-		Username: username,
-		Room:     room,
-		Send:     send,
-		Hub:      h,
+		ID:         uuid.New().String(),
+		Username:   username,
+		Room:       room,
+		RoomPublic: roomPublic,
+		Send:       send,
+		Hub:        h,
 	}
 }
 

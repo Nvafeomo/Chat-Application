@@ -5,7 +5,10 @@ import { ChatRoom } from './components/ChatRoom'
 export type ConnectionConfig = {
   username: string
   room: string
+  password: string
   serverUrl: string
+  /** True when joining right after creating this room in the lobby (same session). */
+  roomCreator?: boolean
 }
 
 function App() {

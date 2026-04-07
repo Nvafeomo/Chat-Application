@@ -4,15 +4,15 @@ A real-time, multi-room chat you can run locally or in Docker. It started as a g
 
 ## What it does
 
-- **Rooms:** Create or join a room by name; everyone in the same room sees the same message stream.
+- **Rooms:** **Subscribe** in chat to pin rooms to the lobby; **recent joins** (last 4 on this device) sit near room/password. **Autocomplete** on the room field after **3+ characters** merges public names from the server with subscribed + recent. **Private** rooms prompt for password in the join form when we know they’re private. Passwords stored as **bcrypt** hashes in memory. The **creator** can reopen a saved password from this **browser only** (localStorage) via **Password** in the header.
 - **Real-time:** WebSockets for instant delivery; your own messages are styled differently from others in the UI.
 - **Resilience:** Reconnect flow and a live member count when the server sends room updates.
 - **Backends:** Primary **Go** server, drop-in **Node** alternative, optional **Docker** compose for one-command runs.
-- **C variant (Linux/WSL):** Classic sockets + pthreads client/server pair for contrast with the Go design.
+- **C variant (Linux/WSL):** Classic sockets + pthreads client/server pair (no password rooms; separate from the Go/Node flow).
 
 ## Stack
 
-**Go 1.21+ · Gorilla WebSocket · React 18 · TypeScript · Vite · Node.js (optional server) · Docker (optional) · C + pthreads (`c-server/`, POSIX only)**
+**Go 1.22+ · Gorilla WebSocket · golang.org/x/crypto/bcrypt · React 18 · TypeScript · Vite · Node.js (optional server) · Docker (optional) · C + pthreads (`c-server/`, POSIX only)**
 
 ## Demo
 
@@ -28,7 +28,7 @@ A real-time, multi-room chat you can run locally or in Docker. It started as a g
 
 ## Run locally
 
-You will need **Node.js 18+** (LTS is fine). For the default backend you also need **Go 1.21+**, or use the Node server instead. **Docker** is optional but handy for a full stack in one command.
+You will need **Node.js 18+** (LTS is fine). For the default backend you also need **Go 1.22+**, or use the Node server instead. **Docker** is optional but handy for a full stack in one command.
 
 ### Docker (simplest)
 
@@ -60,7 +60,7 @@ npm install
 npm run dev
 ```
 
-Open **http://localhost:5173**, enter a username and room (e.g. `general`), then join. All participants must use the **same room name** to see each other.
+Open **http://localhost:5173**. Under **Create a room**, register a name and password, then switch to **Join a room** (or share the name + password with others). Everyone needs the **same room name and password** to chat together.
 
 From the repo root you can start only the client with `npm run dev:client` (still run the Go server separately).
 
@@ -100,7 +100,8 @@ The server sends `-1` to clients when it is full. Stop with Ctrl+C.
 ## Troubleshooting
 
 - **Port 8080 in use (Windows):** `netstat -ano | findstr :8080` to find the PID, then `taskkill /PID <pid> /F`.
-- **Messages not appearing:** Confirm both clients joined the **same** room name.
+- **Messages not appearing:** Same room name and password? Did someone **create** the room first (`Create a room`)?
+- **WebSocket fails after “Join”:** Wrong password or room name; the room must exist on the server.
 - **WebSocket errors:** Ensure the Go (or Node) server is running and the lobby server URL matches (e.g. `http://localhost:8080`).
 
 ## License

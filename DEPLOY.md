@@ -1,6 +1,6 @@
 # Deploy quickly (Docker Compose)
 
-The app is two containers: **Go** (`server`) and **nginx + static UI** (`client`). Nginx proxies `/ws` to the Go service on the Docker network. The UI defaults to **same-origin** in production builds so WebSockets hit `wss://your-client-host/ws` (no manual server URL on first load).
+The app is two containers: **Go** (`server`) and **nginx + static UI** (`client`). Nginx proxies **`/ws`** and **`/api/`** to the Go service. Rooms are **password-protected**; create them in the UI before joining. The lobby defaults to **same-origin** in production builds so API + WebSocket use your public site URL.
 
 ## Railway (good default)
 
