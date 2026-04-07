@@ -18,13 +18,11 @@ A real-time, multi-room chat you can run locally or in Docker. It started as a g
 
 **Lobby — pick a username and room**
 
-<img src="screenshots/enterchat1.png" alt="Chat app lobby: username, server URL, and room name" width="720" />
+<img src="screenshots/lobby.png" alt="Chat app lobby: join or create a room, subscribed rooms, and suggestions" width="720" />
 
 **Chat room**
 
-<img src="screenshots/chatroom1.png" alt="Chat room with messages and connection status" width="720" />
-
-<img src="screenshots/chatroom2.png" alt="Chat room with message list and input" width="720" />
+<img src="screenshots/chatroom.png" alt="Chat room with messages, subscribe, and connection status" width="720" />
 
 ## Run locally
 
