@@ -9,9 +9,10 @@ export function Lobby({ onJoin }: LobbyProps) {
   const [username, setUsername] = useState('')
   const [room, setRoom] = useState('general')
   const [serverUrl, setServerUrl] = useState(() => {
-    if (typeof window === 'undefined') return 'localhost:8080'
-    // Connect directly to backend; use window.location.host only when on port 3000 (Docker)
-    return window.location.port === '3000' ? window.location.host : 'localhost:8080'
+    if (typeof window === 'undefined') return 'http://localhost:8080'
+    // Vite dev: WebSocket goes straight to Go. Production (Docker/nginx/PaaS): same origin so /ws proxies to the API.
+    if (import.meta.env.DEV) return 'http://localhost:8080'
+    return window.location.origin
   })
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -68,7 +69,7 @@ export function Lobby({ onJoin }: LobbyProps) {
               type="text"
               value={serverUrl}
               onChange={(e) => setServerUrl(e.target.value)}
-              placeholder="localhost:8080"
+              placeholder="http://localhost:8080"
             />
           </div>
 

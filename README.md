@@ -39,6 +39,10 @@ docker compose up --build
 - **Client:** http://localhost:3000  
 - **Server:** http://localhost:8080  
 
+### Deploy (PaaS)
+
+See [DEPLOY.md](DEPLOY.md) for a short Railway / Render flow using Docker Compose.
+
 ### Go server + React client
 
 **Terminal 1 — backend**
