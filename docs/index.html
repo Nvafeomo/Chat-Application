@@ -4,22 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Chat App — Demo screenshots</title>
+    <!-- Base helps relative URLs resolve the same on GitHub Pages and when opening the file locally. -->
+    <base href="https://nvafeomo.github.io/Chat-Application/" />
     <style>
-      :root {
-        --bg: #0d1117;
-        --text: #e6edf3;
-        --muted: #8b949e;
-        --border: #30363d;
-      }
-      * {
-        box-sizing: border-box;
-      }
       body {
         margin: 0;
         min-height: 100vh;
-        font-family: system-ui, -apple-system, Segoe UI, sans-serif;
-        background: var(--bg);
-        color: var(--text);
+        font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+        background: #0d1117;
+        color: #e6edf3;
         line-height: 1.5;
       }
       main {
@@ -32,8 +25,8 @@
         font-weight: 600;
         margin: 0 0 0.5rem;
       }
-      p.lead {
-        color: var(--muted);
+      .lead {
+        color: #8b949e;
         margin: 0 0 2rem;
         font-size: 0.95rem;
       }
@@ -44,14 +37,14 @@
         font-size: 0.9rem;
         font-weight: 600;
         margin-bottom: 0.75rem;
-        color: var(--text);
+        color: #e6edf3;
       }
       figure img {
         display: block;
         width: 100%;
         height: auto;
         border-radius: 8px;
-        border: 1px solid var(--border);
+        border: 1px solid #30363d;
       }
     </style>
   </head>
@@ -62,12 +55,12 @@
 
       <figure>
         <figcaption>Lobby</figcaption>
-        <img src="screenshots/lobby.png" alt="Chat app lobby" loading="lazy" />
+        <img src="https://nvafeomo.github.io/Chat-Application/screenshots/lobby.png" alt="Chat app lobby" />
       </figure>
 
       <figure>
         <figcaption>Chat room</figcaption>
-        <img src="screenshots/chatroom.png" alt="Chat room" loading="lazy" />
+        <img src="https://nvafeomo.github.io/Chat-Application/screenshots/chatroom.png" alt="Chat room" />
       </figure>
     </main>
   </body>

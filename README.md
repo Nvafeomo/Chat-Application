@@ -24,7 +24,11 @@ A real-time, multi-room chat you can run locally or in Docker. It started as a g
 
 <img src="docs/screenshots/chatroom.png" alt="Chat room with messages, subscribe, and connection status" width="720" />
 
-**GitHub Pages:** In the repo → **Settings** → **Pages** → **Build and deployment** → Source: **Deploy from a branch** → Branch **main** → Folder **`/docs`**. After the build finishes, open **`https://<your-username>.github.io/<repo-name>/`** — that URL loads **`docs/index.html`**. (Using **`/docs`** only publishes files inside `docs/`; images live in **`docs/screenshots/`**.)
+**GitHub Pages (screenshots):** [https://nvafeomo.github.io/Chat-Application/](https://nvafeomo.github.io/Chat-Application/) · [demo.html](https://nvafeomo.github.io/Chat-Application/demo.html) (same content as the home page).
+
+*Opening `docs/demo.html` from your disk opens a `file:///…` URL in the browser — that’s your local copy. For the public site, paste the **https://nvafeomo.github.io/…** links above (or use them in your resume / portfolio).*
+
+**If you see 404:** Pages only serves what is **committed and pushed** on **`main`** under **`docs/`**. You must have at least **`docs/index.html`**, **`docs/demo.html`**, **`docs/.nojekyll`**, and **`docs/screenshots/*.png`**. Run `git add docs` → `git commit` → `git push`, then confirm these files appear on GitHub. In **Settings → Pages**, source = branch **`main`**, folder **`/docs`**. Wait ~1 minute after the push.
 
 ## Run locally
 
