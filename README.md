@@ -18,11 +18,13 @@ A real-time, multi-room chat you can run locally or in Docker. It started as a g
 
 **Lobby — pick a username and room**
 
-<img src="screenshots/lobby.png" alt="Chat app lobby: join or create a room, subscribed rooms, and suggestions" width="720" />
+<img src="docs/screenshots/lobby.png" alt="Chat app lobby: join or create a room, subscribed rooms, and suggestions" width="720" />
 
 **Chat room**
 
-<img src="screenshots/chatroom.png" alt="Chat room with messages, subscribe, and connection status" width="720" />
+<img src="docs/screenshots/chatroom.png" alt="Chat room with messages, subscribe, and connection status" width="720" />
+
+**GitHub Pages:** In the repo → **Settings** → **Pages** → **Build and deployment** → Source: **Deploy from a branch** → Branch **main** → Folder **`/docs`**. After the build finishes, open **`https://<your-username>.github.io/<repo-name>/`** — that URL loads **`docs/index.html`**. (Using **`/docs`** only publishes files inside `docs/`; images live in **`docs/screenshots/`**.)
 
 ## Run locally
 
@@ -92,7 +94,9 @@ The server sends `-1` to clients when it is full. Stop with Ctrl+C.
 ├── server-node/     # Node.js alternative (no Go required)
 ├── client/          # React + Vite frontend
 ├── c-server/        # Original C implementation (POSIX)
-└── screenshots/     # UI screenshots for this README
+├── docs/
+│   ├── index.html   # GitHub Pages entry (demo images)
+│   └── screenshots/ # PNGs for README + Pages
 ```
 
 ## Troubleshooting
