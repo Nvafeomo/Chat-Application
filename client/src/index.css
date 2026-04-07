@@ -222,8 +222,15 @@ body {
 
 .message-username {
   font-weight: 600;
-  color: var(--accent);
   flex-shrink: 0;
+}
+
+.message-other .message-username {
+  color: var(--accent);
+}
+
+.message-own .message-username {
+  color: var(--success);
 }
 
 .message-content {

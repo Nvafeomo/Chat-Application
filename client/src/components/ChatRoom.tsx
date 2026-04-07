@@ -53,7 +53,13 @@ export function ChatRoom({ config, onLeave }: ChatRoomProps) {
         {messages.map((msg, i) => (
           <div
             key={`${msg.type}-${msg.username ?? ''}-${msg.content}-${i}`}
-            className={`message ${msg.type === 'system' ? 'system' : ''}`}
+            className={`message ${
+              msg.type === 'system'
+                ? 'system'
+                : msg.username === config.username
+                  ? 'message-own'
+                  : 'message-other'
+            }`}
           >
             {msg.type === 'system' ? (
               <span className="system-text">{msg.content}</span>
