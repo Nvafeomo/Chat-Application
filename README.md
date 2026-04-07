@@ -18,17 +18,17 @@ A real-time, multi-room chat you can run locally or in Docker. It started as a g
 
 **Lobby — pick a username and room**
 
-<img src="docs/screenshots/lobby.png" alt="Chat app lobby: join or create a room, subscribed rooms, and suggestions" width="720" />
+<img src="screenshots/lobby.png" alt="Chat app lobby: join or create a room, subscribed rooms, and suggestions" width="720" />
 
 **Chat room**
 
-<img src="docs/screenshots/chatroom.png" alt="Chat room with messages, subscribe, and connection status" width="720" />
+<img src="screenshots/chatroom.png" alt="Chat room with messages, subscribe, and connection status" width="720" />
 
 **GitHub Pages (screenshots):** [https://nvafeomo.github.io/Chat-Application/](https://nvafeomo.github.io/Chat-Application/) · [demo.html](https://nvafeomo.github.io/Chat-Application/demo.html) (same content as the home page).
 
 *Opening `docs/demo.html` from your disk opens a `file:///…` URL in the browser — that’s your local copy. For the public site, paste the **https://nvafeomo.github.io/…** links above (or use them in your resume / portfolio).*
 
-**If you see 404:** Pages only serves what is **committed and pushed** on **`main`** under **`docs/`**. You must have at least **`docs/index.html`**, **`docs/demo.html`**, **`docs/.nojekyll`**, and **`docs/screenshots/*.png`**. Run `git add docs` → `git commit` → `git push`, then confirm these files appear on GitHub. In **Settings → Pages**, source = branch **`main`**, folder **`/docs`**. Wait ~1 minute after the push.
+**If you see 404:** Pages only publishes the **`docs/`** folder. You need **`docs/index.html`**, **`docs/demo.html`**, and **`docs/.nojekyll`** on **`main`**. **Screenshots** live at the **repo root** in **`screenshots/`** (for the README); the Pages HTML loads them via **raw.githubusercontent.com** so images still work on the site. Run `git add docs screenshots` → `git commit` → `git push`. In **Settings → Pages**, source = branch **`main`**, folder **`/docs`**. Wait ~1 minute after the push.
 
 ## Run locally
 
@@ -98,9 +98,8 @@ The server sends `-1` to clients when it is full. Stop with Ctrl+C.
 ├── server-node/     # Node.js alternative (no Go required)
 ├── client/          # React + Vite frontend
 ├── c-server/        # Original C implementation (POSIX)
-├── docs/
-│   ├── index.html   # GitHub Pages entry (demo images)
-│   └── screenshots/ # PNGs for README + Pages
+├── screenshots/     # UI PNGs for README (referenced from docs HTML via raw GitHub)
+├── docs/            # GitHub Pages (index.html, demo.html, .nojekyll)
 ```
 
 ## Troubleshooting
